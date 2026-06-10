@@ -50,6 +50,17 @@ Criar um painel administrativo exclusivo para a guild, com cadastro e monitorame
 - Inserção manual de mortes.
 - Layout dark theme inspirado em Tibia, com sidebar fixa, cards, tabela, modal e responsividade.
 
+## Login local para testes
+
+Enquanto o projeto estiver rodando em localhost sem Supabase configurado, o app ativa automaticamente um modo local com dados mockados no `localStorage`. Use as credenciais abaixo para entrar no dashboard:
+
+```text
+Usuário: admin@neutrinhos.local
+Senha: neutrinhos123
+```
+
+Quando `src/js/supabaseClient.js` receber uma URL e uma anon key reais do Supabase, o modo local é desativado e o login passa a usar Supabase Auth.
+
 ## Setup do Supabase
 
 1. Crie um projeto no Supabase.

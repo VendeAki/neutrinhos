@@ -1,4 +1,4 @@
-import { supabase, getCurrentProfile, canManage } from './supabaseClient.js';
+import { supabase, getCurrentProfile, canManage, isLocalMode } from './supabaseClient.js';
 import { setupCharacters, loadCharacters, getCharactersCache } from './characters.js';
 import { setupDeaths, loadDeaths, renderRecentDeaths } from './deaths.js';
 import { badge, escapeHtml, groupCount, STATUSES, VOCATIONS } from './utils.js';
@@ -29,7 +29,7 @@ async function refreshAll() {
   await loadDeaths(characters);
   renderDashboard(characters);
   renderRecentDeaths();
-  syncStatus.textContent = 'Dados carregados do Supabase';
+  syncStatus.textContent = isLocalMode ? 'Dados carregados do modo local' : 'Dados carregados do Supabase';
 }
 
 function renderDashboard(characters) {
