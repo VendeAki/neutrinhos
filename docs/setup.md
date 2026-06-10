@@ -21,6 +21,7 @@ Criar um painel administrativo exclusivo para a guild, com cadastro e monitorame
   index.html
   login.html
   dashboard.html
+  worlds.html
 /src
   /css
     global.css
@@ -31,6 +32,7 @@ Criar um painel administrativo exclusivo para a guild, com cadastro e monitorame
     dashboard.js
     characters.js
     deaths.js
+    worlds.js
     tibiaApi.js
     utils.js
   /sql
@@ -45,6 +47,7 @@ Criar um painel administrativo exclusivo para a guild, com cadastro e monitorame
   - `leader`: gerencia personagens, tags e mortes.
   - `member`: visualiza o painel.
 - Dashboard com totais, personagens por vocação/status, últimos adicionados e últimas mortes.
+- Consulta de players online por mundo usando TibiaData API v4.
 - CRUD de personagens com filtros por nome, vocação e status.
 - Tags internas: `main`, `maker`, `bomb`, `trusted`, `enemy`, `hunted`, `blacklist`, `war_target`.
 - Inserção manual de mortes.
@@ -60,6 +63,12 @@ Senha: neutrinhos123
 ```
 
 Quando `src/js/supabaseClient.js` receber uma URL e uma anon key reais do Supabase, o modo local é desativado e o login passa a usar Supabase Auth.
+
+## Consulta de players online por mundo
+
+A página `public/worlds.html` consulta a TibiaData API v4 diretamente no navegador para listar players online por mundo. O fluxo funciona junto com o login local: entre com o usuário padrão, abra **Online por mundo** no menu lateral e pesquise mundos como `Quelibra`, `Belobra` ou `Antica`.
+
+A integração fica centralizada em `src/js/tibiaApi.js`, que expõe `getWorldOnline(worldName)` e normalizadores para manter a UI desacoplada do formato bruto da API.
 
 ## Setup do Supabase
 
