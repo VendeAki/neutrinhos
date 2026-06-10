@@ -99,7 +99,7 @@ function renderPlayers() {
     <td><strong>${escapeHtml(player.name)}</strong></td>
     <td>${player.level || '—'}</td>
     <td>${player.vocation ? badge(player.vocation) : '<span class="muted">—</span>'}</td>
-    <td>${escapeHtml(player.guild || '—')}</td>
+    <td><a class="mini-button" href="./character.html?name=${encodeURIComponent(player.name)}">Visualizar</a></td>
   </tr>`).join('') || '<tr><td colspan="4" class="muted">Nenhum player encontrado para os filtros atuais.</td></tr>';
 }
 
