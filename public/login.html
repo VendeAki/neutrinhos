@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | Neutrinhos Carinhosos</title>
+    <link rel="stylesheet" href="../src/css/global.css" />
+  </head>
+  <body class="login-page">
+    <main class="auth-shell">
+      <section class="auth-brand">
+        <p class="eyebrow">Guild privada</p>
+        <h1>Neutrinhos Carinhosos</h1>
+        <p>Controle membros, aliados, inimigos e históricos de mortes em um painel preparado para evoluir.</p>
+      </section>
+
+      <form id="login-form" class="auth-card">
+        <h2>Acessar painel</h2>
+        <label>
+          E-mail
+          <input id="email" name="email" type="email" autocomplete="email" required />
+        </label>
+        <label>
+          Senha
+          <input id="password" name="password" type="password" autocomplete="current-password" required />
+        </label>
+        <button class="button primary full" type="submit">Entrar com Supabase</button>
+        <p id="auth-message" class="form-message" role="status"></p>
+        <p class="muted small">O acesso é liberado apenas para usuários previamente autorizados no Supabase.</p>
+      </form>
+    </main>
+    <script type="module" src="../src/js/auth.js"></script>
+  </body>
+</html>
