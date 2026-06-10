@@ -24,6 +24,10 @@ export async function getWorldOnline(worldName) {
   return request(`/world/${encodeURIComponent(worldName)}`);
 }
 
+export async function getHighscores(worldName, category = 'experience', vocation = 'all', page = 1) {
+  return request(`/highscores/${encodeURIComponent(worldName)}/${encodeURIComponent(category)}/${encodeURIComponent(vocation)}/${page}`);
+}
+
 export function normalizeWorldResponse(payload) {
   const world = payload?.world || payload?.data?.world || payload?.worlds?.world || payload;
   const onlinePlayers = normalizeOnlinePlayers(world?.online_players || world?.players_online || world?.online || []);
@@ -37,6 +41,27 @@ export function normalizeWorldResponse(payload) {
     onlinePlayers,
     raw: payload,
   };
+}
+
+
+export function normalizeHighscoresResponse(payload) {
+  const highscores = payload?.highscores || payload?.data?.highscores || payload || {};
+  const rows = highscores.highscore_list
+    || highscores.data
+    || highscores.highscores
+    || highscores.entries
+    || highscores.list
+    || [];
+
+  const entries = Array.isArray(rows) ? rows : Object.values(rows);
+  return entries.map((entry) => ({
+    name: entry.name || entry.character_name || entry.character || '—',
+    rank: Number(entry.rank || 0),
+    vocation: entry.vocation || entry.voc || null,
+    world: entry.world || highscores.world || highscores.filters?.world || null,
+    points: Number(entry.points || entry.value || entry.experience || 0),
+    level: Number(entry.level || 0),
+  })).filter((entry) => entry.name && entry.name !== '—');
 }
 
 export function normalizeOnlinePlayers(players) {

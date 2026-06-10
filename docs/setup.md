@@ -52,7 +52,7 @@ Criar um painel administrativo exclusivo para a guild, com cadastro e monitorame
   - `member`: visualiza o painel.
 - Dashboard com totais, personagens por vocação/status, últimos adicionados e últimas mortes.
 - Consulta de players online por mundo usando TibiaData API v4.
-- Página de detalhes de personagem em estilo Community Tibia com informações, mortes e varredura de frags/assistências nas deathlists dos players online do mundo.
+- Página de detalhes de personagem em estilo Community Tibia com informações, mortes e varredura de frags/assistências nas deathlists de jogadores do mundo acima do level 8 via highscores.
 - Página de notificações para monitorar login/mortes de chars e estimar possíveis personagens da mesma conta por heurística de troca online/offline.
 - CRUD de personagens com filtros por nome, vocação e status.
 - Tags internas: `main`, `maker`, `bomb`, `trusted`, `enemy`, `hunted`, `blacklist`, `war_target`.
@@ -74,7 +74,7 @@ Quando `src/js/supabaseClient.js` receber uma URL e uma anon key reais do Supaba
 
 A página `public/worlds.html` consulta a TibiaData API v4 diretamente no navegador para listar players online por mundo. O fluxo funciona junto com o login local: entre com o usuário padrão, abra **Online por mundo** no menu lateral e pesquise mundos como `Quelibra`, `Belobra` ou `Antica`.
 
-A integração fica centralizada em `src/js/tibiaApi.js`, que expõe `getWorldOnline(worldName)`, `getCharacter(characterName)` e normalizadores para manter a UI desacoplada do formato bruto da API. Na lista de online, o botão **Visualizar** abre `public/character.html` com o perfil do personagem. Essa tela também varre as deathlists dos players online do mesmo mundo para encontrar o char visualizado como autor ou assistência em mortes dos últimos 30 dias.
+A integração fica centralizada em `src/js/tibiaApi.js`, que expõe `getWorldOnline(worldName)`, `getHighscores(worldName)`, `getCharacter(characterName)` e normalizadores para manter a UI desacoplada do formato bruto da API. Na lista de online, o botão **Visualizar** abre `public/character.html` com o perfil do personagem. Essa tela também carrega os highscores de experiência do mesmo mundo para varrer deathlists de jogadores acima do level 8 e encontrar o char visualizado como autor ou assistência em mortes dos últimos 30 dias, mesmo que esses jogadores não estejam online no momento.
 
 ## Notificações e radar de possíveis makers
 

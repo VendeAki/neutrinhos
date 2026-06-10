@@ -1,9 +1,11 @@
 import { getCurrentProfile, isLocalMode, supabase } from './supabaseClient.js';
-import { getCharacter, getWorldOnline, normalizeCharacterResponse, normalizeWorldResponse } from './tibiaApi.js';
+import { getCharacter, getHighscores, normalizeCharacterResponse, normalizeHighscoresResponse } from './tibiaApi.js';
 import { badge, escapeHtml, formatDate } from './utils.js';
 
 const DEATHLIST_LOOKBACK_DAYS = 30;
-const DEATHLIST_SCAN_LIMIT = 120;
+const DEATHLIST_MIN_LEVEL = 9;
+const DEATHLIST_HIGHSCORE_MAX_PAGES = 20;
+const DEATHLIST_SCAN_LIMIT = 1000;
 const DEATHLIST_BATCH_SIZE = 6;
 
 const elements = {
@@ -128,27 +130,45 @@ async function scanWorldDeathlists(character) {
     return;
   }
 
-  elements.fragScan.innerHTML = `<p class="muted">Buscando ${escapeHtml(character.name)} nas deathlists dos players online em ${escapeHtml(character.world)}...</p>`;
+  elements.fragScan.innerHTML = `<p class="muted">Buscando ${escapeHtml(character.name)} nas deathlists dos jogadores de ${escapeHtml(character.world)} acima do level 8...</p>`;
 
   try {
-    const world = normalizeWorldResponse(await getWorldOnline(character.world));
-    const playersToScan = world.onlinePlayers
-      .filter((player) => !sameName(player.name, character.name))
-      .slice(0, DEATHLIST_SCAN_LIMIT);
+    const candidates = await loadWorldHighscoreCandidates(character.world, character.name);
+    const playersToScan = candidates.slice(0, DEATHLIST_SCAN_LIMIT);
 
     const findings = [];
     for (let index = 0; index < playersToScan.length; index += DEATHLIST_BATCH_SIZE) {
       const batch = playersToScan.slice(index, index + DEATHLIST_BATCH_SIZE);
-      elements.fragScan.innerHTML = `<p class="muted">Escaneando deathlists ${Math.min(index + batch.length, playersToScan.length)}/${playersToScan.length} em ${escapeHtml(world.name)}...</p>`;
+      elements.fragScan.innerHTML = `<p class="muted">Escaneando deathlists ${Math.min(index + batch.length, playersToScan.length)}/${playersToScan.length} de jogadores level ${DEATHLIST_MIN_LEVEL}+ em ${escapeHtml(character.world)}...</p>`;
       const batchFindings = await Promise.all(batch.map((player) => scanPlayerDeathlist(player, character.name)));
       findings.push(...batchFindings.flat());
     }
 
-    renderFragScan(character, world, findings, playersToScan.length);
+    renderFragScan(character, findings, playersToScan.length, candidates.length);
   } catch (error) {
     console.error(error);
     elements.fragScan.innerHTML = `<p class="muted">Não foi possível buscar deathlists em ${escapeHtml(character.world)}. ${escapeHtml(error.message)}</p>`;
   }
+}
+
+async function loadWorldHighscoreCandidates(worldName, characterName) {
+  const byName = new Map();
+
+  for (let page = 1; page <= DEATHLIST_HIGHSCORE_MAX_PAGES; page += 1) {
+    elements.fragScan.innerHTML = `<p class="muted">Carregando highscores de ${escapeHtml(worldName)} página ${page}/${DEATHLIST_HIGHSCORE_MAX_PAGES}...</p>`;
+    const entries = normalizeHighscoresResponse(await getHighscores(worldName, 'experience', 'all', page));
+    if (!entries.length) break;
+
+    entries
+      .filter((entry) => entry.level >= DEATHLIST_MIN_LEVEL)
+      .filter((entry) => !sameName(entry.name, characterName))
+      .forEach((entry) => byName.set(normalizeName(entry.name), entry));
+
+    const lowestLevel = Math.min(...entries.map((entry) => entry.level || Number.MAX_SAFE_INTEGER));
+    if (lowestLevel < DEATHLIST_MIN_LEVEL) break;
+  }
+
+  return [...byName.values()].sort((a, b) => b.level - a.level);
 }
 
 async function scanPlayerDeathlist(player, characterName) {
@@ -172,20 +192,20 @@ async function scanPlayerDeathlist(player, characterName) {
   }
 }
 
-function renderFragScan(character, world, findings, scannedCount) {
+function renderFragScan(character, findings, scannedCount, candidateCount) {
   const sorted = findings.sort((a, b) => dateValue(b.time) - dateValue(a.time));
   const kills = sorted.filter((item) => item.role === 'autor').length;
   const assists = sorted.filter((item) => item.role === 'assistência').length;
 
   if (!sorted.length) {
-    elements.fragScan.innerHTML = `<p>Nenhuma participação de ${escapeHtml(character.name)} foi encontrada nas deathlists dos ${scannedCount} players online escaneados em ${escapeHtml(world.name)} nos últimos ${DEATHLIST_LOOKBACK_DAYS} dias.</p>`;
+    elements.fragScan.innerHTML = `<p>Nenhuma participação de ${escapeHtml(character.name)} foi encontrada nas deathlists dos ${scannedCount} jogadores level ${DEATHLIST_MIN_LEVEL}+ escaneados em ${escapeHtml(character.world)} nos últimos ${DEATHLIST_LOOKBACK_DAYS} dias.</p>`;
     return;
   }
 
   elements.fragScan.innerHTML = `
     <div class="deathlist-scan-summary">
-      <span>${escapeHtml(world.name)}</span>
-      <span>${scannedCount} deathlists escaneadas</span>
+      <span>${escapeHtml(character.world)}</span>
+      <span>${scannedCount}/${candidateCount} deathlists level ${DEATHLIST_MIN_LEVEL}+ escaneadas</span>
       <span>${kills} como autor</span>
       <span>${assists} como assistência</span>
     </div>
