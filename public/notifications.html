@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notificações | Neutrinhos Carinhosos</title>
+    <link rel="stylesheet" href="../src/css/global.css" />
+    <link rel="stylesheet" href="../src/css/dashboard.css" />
+  </head>
+  <body>
+    <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="guild-mark">NC</div>
+        <h1>Neutrinhos<br />Carinhosos</h1>
+        <nav>
+          <a href="./dashboard.html#dashboard">Dashboard</a>
+          <a href="./dashboard.html#characters">Personagens</a>
+          <a href="./worlds.html">Online por mundo</a>
+          <a href="./notifications.html" aria-current="page">Notificações</a>
+          <a href="./dashboard.html#deaths">Mortes</a>
+        </nav>
+        <div class="sidebar-footer">
+          <span id="user-role" class="badge badge-neutral">member</span>
+          <button id="logout-button" class="button ghost full" type="button">Sair</button>
+        </div>
+      </aside>
+
+      <main class="content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Alertas em tempo real</p>
+            <h2>Notificações de login, mortes e possíveis makers</h2>
+          </div>
+          <button id="notification-permission-button" class="button primary" type="button">Ativar pop-ups</button>
+        </header>
+
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <h3>Adicionar char monitorado</h3>
+              <p class="muted small">A página consulta TibiaData em intervalos enquanto estiver aberta. Os alertas ficam salvos no navegador.</p>
+            </div>
+            <span id="monitor-status" class="badge badge-gold">monitor parado</span>
+          </div>
+          <form id="watch-form" class="world-search-form">
+            <label>Char<input id="watch-character-name" name="character_name" placeholder="Ex.: Itzknust" required /></label>
+            <label>Mundo<input id="watch-world-name" name="world_name" placeholder="Ex.: Antica" value="Antica" required /></label>
+            <button class="button primary" type="submit">Adicionar alerta</button>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <h3>Chares em alerta</h3>
+            <div class="row-actions">
+              <button id="scan-now-button" class="button ghost" type="button">Escanear agora</button>
+              <button id="clear-events-button" class="button ghost" type="button">Limpar eventos</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Char</th><th>Mundo</th><th>Status</th><th>Última morte</th><th>Último scan</th><th>Ações</th></tr></thead>
+              <tbody id="watchlist-table"><tr><td colspan="6" class="muted">Nenhum char monitorado.</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <h3>Eventos recentes</h3>
+            <span class="muted small">Pop-ups de login/morte também aparecem aqui.</span>
+          </div>
+          <ul id="notification-events" class="compact-list notification-events"></ul>
+        </section>
+
+        <section class="panel tibiaspy-panel">
+          <div class="section-heading">
+            <div>
+              <h3>Radar de possíveis chars da mesma conta</h3>
+              <p class="muted small">Heurística inspirada no TibiaSpy: aumenta probabilidade quando outro char aparece online logo após o char observado sair.</p>
+            </div>
+            <span id="candidate-count" class="badge badge-neutral">0 candidatos</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>#</th><th>Score</th><th>Prob.</th><th>Nome</th><th>Motivo</th><th>Exportar</th></tr></thead>
+              <tbody id="candidates-table"><tr><td colspan="6" class="muted">Adicione um char e deixe o monitor rodar para gerar probabilidades.</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="../src/js/notifications.js"></script>
+  </body>
+</html>

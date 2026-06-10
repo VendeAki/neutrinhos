@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personagem | Neutrinhos Carinhosos</title>
+    <link rel="stylesheet" href="../src/css/global.css" />
+    <link rel="stylesheet" href="../src/css/dashboard.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="guild-mark">NC</div>
+        <h1>Neutrinhos<br />Carinhosos</h1>
+        <nav>
+          <a href="./dashboard.html#dashboard">Dashboard</a>
+          <a href="./dashboard.html#characters">Personagens</a>
+          <a href="./worlds.html" aria-current="page">Online por mundo</a>
+          <a href="./notifications.html">Notificações</a>
+          <a href="./dashboard.html#deaths">Mortes</a>
+        </nav>
+        <div class="sidebar-footer">
+          <span id="user-role" class="badge badge-neutral">member</span>
+          <button id="logout-button" class="button ghost full" type="button">Sair</button>
+        </div>
+      </aside>
+
+      <main class="content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Community Tibia style</p>
+            <h2 id="character-page-title">Detalhes do personagem</h2>
+          </div>
+          <a class="button ghost" href="./worlds.html">Voltar aos mundos</a>
+        </header>
+
+        <section class="panel">
+          <form id="character-lookup-form" class="world-search-form">
+            <label>
+              Nome do personagem
+              <input id="character-lookup-name" name="character_name" placeholder="Ex.: Itzknust" required />
+            </label>
+            <button class="button primary" type="submit">Consultar personagem</button>
+            <span id="character-source-status" class="badge badge-gold">aguardando consulta</span>
+          </form>
+        </section>
+
+        <section class="community-sheet">
+          <article class="community-box">
+            <h3>Character Information</h3>
+            <div id="character-info-table" class="community-table"><p class="muted">Carregando informações...</p></div>
+          </article>
+
+          <article class="community-box">
+            <h3>Account Achievements</h3>
+            <div id="character-achievements" class="community-table"><p class="muted">Carregando conquistas...</p></div>
+          </article>
+
+          <article class="community-box">
+            <h3>Character Deaths (Last 30 Days)</h3>
+            <div id="character-deaths" class="community-table"><p class="muted">Carregando mortes...</p></div>
+          </article>
+
+          <article class="community-box">
+            <h3>Frags encontrados nas deathlists (últimos 30 dias)</h3>
+            <div id="character-frag-scan" class="community-table"><p class="muted">Aguardando busca nas deathlists do mundo...</p></div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="../src/js/characterProfile.js"></script>
+  </body>
+</html>

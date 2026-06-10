@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Players online | Neutrinhos Carinhosos</title>
+    <link rel="stylesheet" href="../src/css/global.css" />
+    <link rel="stylesheet" href="../src/css/dashboard.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="guild-mark">NC</div>
+        <h1>Neutrinhos<br />Carinhosos</h1>
+        <nav>
+          <a href="./dashboard.html#dashboard">Dashboard</a>
+          <a href="./dashboard.html#characters">Personagens</a>
+          <a href="./worlds.html" aria-current="page">Online por mundo</a>
+          <a href="./notifications.html">Notificações</a>
+          <a href="./dashboard.html#deaths">Mortes</a>
+        </nav>
+        <div class="sidebar-footer">
+          <span id="user-role" class="badge badge-neutral">member</span>
+          <button id="logout-button" class="button ghost full" type="button">Sair</button>
+        </div>
+      </aside>
+
+      <main class="content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">TibiaData API</p>
+            <h2>Players online por mundo</h2>
+          </div>
+          <a class="button ghost" href="./dashboard.html">Voltar ao dashboard</a>
+        </header>
+
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <h3>Consultar mundo</h3>
+              <p class="muted small">Busca em tempo real na TibiaData API v4. A lista pode variar conforme o cache público da API.</p>
+            </div>
+            <span id="world-source-status" class="badge badge-gold">aguardando consulta</span>
+          </div>
+
+          <form id="world-search-form" class="world-search-form">
+            <label>
+              Mundo
+              <input id="world-name" name="world_name" list="world-suggestions" placeholder="Ex.: Quelibra, Belobra, Antica" value="Quelibra" required />
+              <datalist id="world-suggestions">
+                <option value="Quelibra"></option>
+                <option value="Belobra"></option>
+                <option value="Gentebra"></option>
+                <option value="Inabra"></option>
+                <option value="Antica"></option>
+                <option value="Secura"></option>
+              </datalist>
+            </label>
+            <button class="button primary" type="submit">Buscar online</button>
+            <button id="refresh-world-button" class="button ghost" type="button">Atualizar</button>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="stat-grid world-stat-grid">
+            <article class="stat-card"><span>Mundo</span><strong id="world-display-name">—</strong><small id="world-status">status não carregado</small></article>
+            <article class="stat-card"><span>Online</span><strong id="world-online-count">0</strong><small>players no momento</small></article>
+            <article class="stat-card"><span>Localização</span><strong id="world-location">—</strong><small id="world-pvp-type">tipo PvP</small></article>
+            <article class="stat-card"><span>Última consulta</span><strong id="world-last-fetch">—</strong><small>TibiaData API</small></article>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <h3>Lista de players online</h3>
+            <div class="filters world-filters">
+              <input id="online-filter-name" type="search" placeholder="Filtrar por nome" />
+              <select id="online-filter-vocation"><option value="">Todas vocações</option></select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Nome</th><th>Level</th><th>Vocação</th><th>Visualizar</th></tr></thead>
+              <tbody id="online-players-table"><tr><td colspan="4" class="muted">Faça uma consulta para listar os players online.</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="../src/js/worlds.js"></script>
+  </body>
+</html>
