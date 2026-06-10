@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | Neutrinhos Carinhosos</title>
+    <link rel="stylesheet" href="../src/css/global.css" />
+    <link rel="stylesheet" href="../src/css/dashboard.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="guild-mark">NC</div>
+        <h1>Neutrinhos<br />Carinhosos</h1>
+        <nav>
+          <a href="#dashboard">Dashboard</a>
+          <a href="#characters">Personagens</a>
+          <a href="#deaths">Mortes</a>
+          <a href="#details">Detalhes</a>
+        </nav>
+        <div class="sidebar-footer">
+          <span id="user-role" class="badge badge-neutral">member</span>
+          <button id="logout-button" class="button ghost full" type="button">Sair</button>
+        </div>
+      </aside>
+
+      <main class="content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Painel privado</p>
+            <h2>Gestão da guild Neutrinhos Carinhosos</h2>
+          </div>
+          <button id="new-character-button" class="button primary" type="button">Novo personagem</button>
+        </header>
+
+        <section id="dashboard" class="panel">
+          <div class="section-heading">
+            <h3>Resumo da guild</h3>
+            <span id="sync-status" class="muted small">Dados carregados do Supabase</span>
+          </div>
+          <div class="stat-grid">
+            <article class="stat-card"><span>Total</span><strong id="total-characters">0</strong><small>personagens cadastrados</small></article>
+            <article class="stat-card"><span>Ativos</span><strong id="active-characters">0</strong><small>membros/leaders/vice leaders</small></article>
+            <article class="stat-card"><span>Inimigos</span><strong id="enemy-characters">0</strong><small>enemy, hunted ou blacklist</small></article>
+            <article class="stat-card"><span>Última morte</span><strong id="last-death">—</strong><small>registrada manualmente</small></article>
+          </div>
+          <div class="dashboard-grid">
+            <article class="panel subpanel"><h4>Por vocação</h4><div id="vocation-summary" class="pill-list"></div></article>
+            <article class="panel subpanel"><h4>Por status</h4><div id="status-summary" class="pill-list"></div></article>
+            <article class="panel subpanel"><h4>Últimos adicionados</h4><ul id="recent-characters" class="compact-list"></ul></article>
+            <article class="panel subpanel"><h4>Últimas mortes</h4><ul id="recent-deaths" class="compact-list"></ul></article>
+          </div>
+        </section>
+
+        <section id="characters" class="panel">
+          <div class="section-heading">
+            <h3>Personagens</h3>
+            <div class="filters">
+              <input id="filter-name" type="search" placeholder="Buscar por nome" />
+              <select id="filter-vocation"><option value="">Todas vocações</option></select>
+              <select id="filter-status"><option value="">Todos status</option></select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Nome</th><th>Level</th><th>Vocação</th><th>Mundo</th><th>Status</th><th>Tags</th><th>Ações</th></tr></thead>
+              <tbody id="characters-table"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="details" class="panel character-details hidden">
+          <div class="section-heading"><h3>Detalhes do personagem</h3><button id="close-details" class="button ghost" type="button">Fechar</button></div>
+          <div id="character-details-content" class="details-grid"></div>
+        </section>
+
+        <section id="deaths" class="panel">
+          <div class="section-heading"><h3>Registrar morte manual</h3><span class="muted small">Preparado para futura importação via TibiaData API</span></div>
+          <form id="death-form" class="form-grid">
+            <label>Personagem<select id="death-character-id" name="character_id"></select></label>
+            <label>Nome<input id="death-character-name" name="character_name" required /></label>
+            <label>Data/hora<input id="death-time" name="death_time" type="datetime-local" required /></label>
+            <label>Level<input id="death-level" name="level" type="number" min="1" /></label>
+            <label class="wide">Morto por<input id="death-killed-by" name="killed_by" /></label>
+            <label>Fonte<input id="death-source" name="source" value="manual" /></label>
+            <label class="checkbox"><input id="death-is-pvp" name="is_pvp" type="checkbox" /> PvP</label>
+            <button class="button primary" type="submit">Salvar morte</button>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="character-modal" class="modal-card">
+      <form id="character-form" method="dialog" class="form-grid">
+        <input id="character-id" name="id" type="hidden" />
+        <div class="wide modal-header"><h3 id="character-form-title">Novo personagem</h3><button class="icon-button" type="button" data-close-modal>×</button></div>
+        <label>Nome<input id="character-name" name="character_name" required /></label>
+        <label>Level<input id="character-level" name="level" type="number" min="1" /></label>
+        <label>Vocação<select id="character-vocation" name="vocation"></select></label>
+        <label>Mundo<input id="character-world" name="world" value="Quelibra" /></label>
+        <label>Rank na guild<input id="character-guild-rank" name="guild_rank" /></label>
+        <label>Status<select id="character-status" name="status"></select></label>
+        <label>Owner<input id="character-owner" name="owner_name" /></label>
+        <label>Discord<input id="character-discord" name="discord_name" /></label>
+        <label>Último online<input id="character-last-seen" name="last_seen_online" type="datetime-local" /></label>
+        <label class="checkbox"><input id="character-main" name="main_character" type="checkbox" /> Main character</label>
+        <fieldset class="wide tag-fieldset"><legend>Tags internas</legend><div id="tag-options" class="tag-options"></div></fieldset>
+        <label class="wide">Notas<textarea id="character-notes" name="notes" rows="4"></textarea></label>
+        <div class="wide form-actions"><button class="button ghost" type="button" data-close-modal>Cancelar</button><button class="button primary" type="submit">Salvar</button></div>
+      </form>
+    </dialog>
+
+    <script type="module" src="../src/js/dashboard.js"></script>
+  </body>
+</html>
